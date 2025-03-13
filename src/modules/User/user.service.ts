@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -21,6 +21,11 @@ export class UserService {
   // Find a user by email
   async findUserByEmail(email: string): Promise<User | null> {
     return this.userRepository.findOne({ where: { email } });
+  }
+
+  // Find a user by email
+  async findUserBy(where: FindOptionsWhere<User>): Promise<User | null> {
+    return this.userRepository.findOne({ where });
   }
 
   // Find a user by ID

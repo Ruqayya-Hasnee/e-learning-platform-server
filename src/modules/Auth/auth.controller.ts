@@ -9,7 +9,8 @@ export class AuthController {
 
   @Post('/login')
   async handleLogin(@Body() loginDto: LoginDto) {
-    return loginDto;
+    return this.authService.login(loginDto);
+
   }
 
   @Post('/signup')
