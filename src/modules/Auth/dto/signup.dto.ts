@@ -6,13 +6,13 @@ import {
   IsArray,
   IsEnum,
 } from 'class-validator';
-import { roleTypeEnum } from 'src/types/common';
+import { RoleTypeEnum } from 'src/types/common';
 
 export class SignupDto {
   @IsNotEmpty()
   @IsString()
-  @IsEnum(roleTypeEnum)
-  role: roleTypeEnum;
+  @IsEnum(RoleTypeEnum)
+  role: RoleTypeEnum;
 
   @IsNotEmpty()
   @IsString()
