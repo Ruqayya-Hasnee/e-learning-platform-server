@@ -12,7 +12,7 @@ import { RoleTypeEnum } from 'src/types/common';
 export class SignupDto {
   @IsOptional()
   @IsEnum(RoleTypeEnum)
-  role: RoleTypeEnum = RoleTypeEnum.student;
+  role: RoleTypeEnum;
 
   @IsNotEmpty()
   @IsString()

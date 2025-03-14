@@ -31,7 +31,7 @@ export class User {
   achievements: string[];
 
   @Column({ type: 'enum', enum: RoleTypeEnum, default: RoleTypeEnum.student })
-  role: RoleTypeEnum;
+  role: RoleTypeEnum = RoleTypeEnum.student;
 
   @CreateDateColumn()
   created_at: Date;
