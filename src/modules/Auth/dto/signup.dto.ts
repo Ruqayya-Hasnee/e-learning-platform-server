@@ -5,14 +5,14 @@ import {
   MinLength,
   IsArray,
   IsEnum,
+  IsOptional,
 } from 'class-validator';
 import { RoleTypeEnum } from 'src/types/common';
 
 export class SignupDto {
-  @IsNotEmpty()
-  @IsString()
+  @IsOptional()
   @IsEnum(RoleTypeEnum)
-  role: RoleTypeEnum;
+  role: RoleTypeEnum = RoleTypeEnum.student;
 
   @IsNotEmpty()
   @IsString()
@@ -26,11 +26,11 @@ export class SignupDto {
   @MinLength(6)
   password: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   introduction: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   education: string;
 
