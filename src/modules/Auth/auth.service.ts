@@ -8,6 +8,7 @@ import { CreateUserDto } from '../User/dto/create-user.dto';
 import { User } from '../User/entities/user.entity';
 import { LoginDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
+import { RoleTypeEnum } from 'src/types/common';
 
 @Injectable()
 export class AuthService {
@@ -26,7 +27,7 @@ export class AuthService {
     return this.userService.createUser(createUserDto);
   }
 
-  async login(loginDto: LoginDto): Promise<{ access_token: string }> {
+  async login(loginDto: LoginDto): Promise<{ access_token: string, role: RoleTypeEnum }> {
     const existingUser = await this.userService.findUserBy({
       email: loginDto.email,
       password: loginDto.password,
@@ -40,7 +41,7 @@ export class AuthService {
     const payload = { userId: existingUser.id, email: existingUser.email };
     const access_token = this.jwtService.sign(payload);
 
-    return { access_token };
+    return { access_token, role: existingUser.role };
   }
 
   verifyToken(token: string) {

@@ -7,7 +7,7 @@ export class CreateUsersTable1741803694241 implements MigrationInterface {
 
     // Create ENUM type for role
     await queryRunner.query(
-      `CREATE TYPE "user_role_enum" AS ENUM ('student', 'instructor');`,
+      `CREATE TYPE "user_role_enum" AS ENUM ('STUDENT', 'INSTRUCTOR');`,
     );
 
     await queryRunner.query(`
