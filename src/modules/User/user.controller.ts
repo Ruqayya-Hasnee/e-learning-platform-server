@@ -1,6 +1,16 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get, Req, UnauthorizedException } from '@nestjs/common';
+import { UserService } from './user.service';
+import { AuthenticatedRequest } from 'src/types/common';
 
 @Controller('users')
 export class UserController {
-  constructor() {}
+  constructor(private readonly userService: UserService) {}
+
+  @Get('/me')
+  getProfile(@Req() req: AuthenticatedRequest) {
+    if (!req.user) {
+      throw new UnauthorizedException('Not authenticated');
+    }
+    return this.userService.findUserById(req.user.id); // Use user ID from token
+  }
 }
