@@ -5,6 +5,10 @@ export class CreateUsersTable1741803694241 implements MigrationInterface {
     // Enable uuid-ossp extension (required for generating UUIDs)
     await queryRunner.query(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp";`);
 
+    await queryRunner.query(
+      `DROP TYPE IF EXISTS "user_role_enum";`,
+    );
+
     // Create ENUM type for role
     await queryRunner.query(
       `CREATE TYPE "user_role_enum" AS ENUM ('STUDENT', 'INSTRUCTOR');`,
