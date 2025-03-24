@@ -68,6 +68,10 @@ Ensure PostgreSQL is running.
 
 Create a database named your_database.
 
+create migration using this command
+
+npm run migration:generate --name=nameOfMigration
+
 Use the credentials defined in the .env file.
 
 5. Run Migrations
