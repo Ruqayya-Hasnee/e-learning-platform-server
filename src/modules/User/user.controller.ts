@@ -8,6 +8,8 @@ export class UserController {
 
   @Get('/me')
   getProfile(@Req() req: AuthenticatedRequest) {
-    return this.userService.findUserById(req.user.id); // Use user ID from token
+    console.log(req.user)
+    return this.userService.findUserById(req.user.userId); // Use user ID from token
   }
 }
+
