@@ -10,7 +10,7 @@ export class CreateCoursesTable1742817366042 implements MigrationInterface {
     await queryRunner.query(`
             CREATE TABLE courses (
                 id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-                created_by UUID REFERENCES users(id),
+                created_by UUID REFERENCES users(id)
                 title VARCHAR(100) NOT NULL,
                 description VARCHAR(150) UNIQUE NOT NULL,
                 price DECIMAL(10, 2) NOT NULL,

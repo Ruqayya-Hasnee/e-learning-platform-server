@@ -7,6 +7,7 @@ import { ConfigModule } from '@nestjs/config';
 import { JwtMiddleware } from 'src/middlewares/auth.middleware';
 import { AuthService } from '../Auth/auth.service';
 import { UserModule } from '../User/user.module';
+import { CourseModule } from '../course/course.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { UserModule } from '../User/user.module';
     DatabaseModule,
     UserModule,
     AuthModule,
+    CourseModule
   ],
   controllers: [AppController],
   providers: [AppService],
