@@ -5,12 +5,12 @@ import { Course } from './entities/course.entity';
 
 @Controller('courses')
 export class CourseController {
-    constructor(private readonly courseService: CourseService) {}
+  constructor(private readonly courseService: CourseService) {}
+
+  @Get()
+  async getAllCourses(): Promise<Course[]> {
+    return this.courseService.getAllCourses();
+  }
+
   
-
-    @Get('/getAllCourses')
-async getAllCourses(): Promise<Course[]> {
-  return this.courseService.getAllCourses();
 }
-
-    }

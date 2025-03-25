@@ -8,10 +8,8 @@ export class CourseService {
   @InjectRepository(Course)
   private readonly courseRepository: Repository<Course>;
 
-
+  // Get all course
   async getAllCourses(): Promise<Course[]> {
-      return await this.courseRepository.find();
-   
+    return await this.courseRepository.find();
   }
-  
 }
