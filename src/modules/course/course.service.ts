@@ -16,24 +16,22 @@ export class CourseService {
 
   // Get all courses
   async getAllCourses(): Promise<Course[]> {
-    return await this.courseRepository.find();
+    return this.courseRepository.find({
+      relations: ['created_by'], 
+    });
   }
 
   // Create a new course
-  async createCourse(createCourseDto: CreateCourseDto, userId: string): Promise<Course> {
-    const user = await this.userRepository.findOne({
-      where: { id: userId }
-    });
-
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
-
+ 
+  async createCourse(courseData: CreateCourseDto, videoPath: string, createdBy: string) {
+    console.log("Saving Video Path:", videoPath); // ✅ Debugging log
+  
     const newCourse = this.courseRepository.create({
-      ...createCourseDto,
-      created_by: user,
+      ...courseData,
+      videoPath, // ✅ Ensure videoPath is included
+      created_by: { id: createdBy }, // ✅ Pass created_by correctly
     });
-
+  
     return this.courseRepository.save(newCourse);
   }
 }

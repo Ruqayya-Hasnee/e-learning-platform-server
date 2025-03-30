@@ -14,6 +14,7 @@ export class CreateCoursesTable1742817366042 implements MigrationInterface {
                 title VARCHAR(100) NOT NULL,
                 description VARCHAR(150) NOT NULL,
                 price DECIMAL(10, 2) NOT NULL,
+                video_path VARCHAR(255) NOT NULL, 
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
