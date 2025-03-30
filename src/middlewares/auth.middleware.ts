@@ -1,4 +1,8 @@
-import { Injectable, NestMiddleware, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NestMiddleware,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { NextFunction, Response, Request } from 'express';
 import { AuthService } from 'src/modules/Auth/auth.service';
 
@@ -7,7 +11,11 @@ export class JwtMiddleware implements NestMiddleware {
   constructor(private readonly authService: AuthService) {}
 
   async use(req: Request, res: Response, next: NextFunction) {
-    if (req.originalUrl.startsWith('/auth/')) {
+    console.log(req.originalUrl)
+    if (
+      req.originalUrl.startsWith('/auth/') ||
+      req.originalUrl.startsWith('/uploads/courses')
+    ) {
       return next(); // Skip authentication for public routes
     }
 
