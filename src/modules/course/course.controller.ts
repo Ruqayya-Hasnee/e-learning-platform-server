@@ -19,7 +19,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 export class CourseController {
   constructor(private readonly courseService: CourseService) {}
 
-  @Get() // ✅ This decorator is missing!
+  @Get() 
   async getAllCourses(): Promise<Course[]> {
     return this.courseService.getAllCourses();
   }
@@ -55,4 +55,12 @@ export class CourseController {
     const videoPath = `/uploads/courses/${video.filename}`;
     return this.courseService.createCourse(courseData, videoPath, userId);
   }
+
+  @Get('uploadedByMe') 
+  async getAllCoursesuploadedByMe(@Req() req: AuthenticatedRequest): Promise<Course[]> {
+    const userId = req.user?.userId;
+    return this.courseService.getAllCoursesuploadedByMe(userId);
+  }
+
+
 }

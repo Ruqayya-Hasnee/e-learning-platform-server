@@ -7,6 +7,7 @@ import { User } from '../User/entities/user.entity';
 
 @Injectable()
 export class CourseService {
+  courseService: any;
   constructor(
     @InjectRepository(Course)
     private readonly courseRepository: Repository<Course>,
@@ -17,21 +18,35 @@ export class CourseService {
   // Get all courses
   async getAllCourses(): Promise<Course[]> {
     return this.courseRepository.find({
-      relations: ['created_by'], 
+      relations: ['created_by'],
     });
   }
 
   // Create a new course
- 
-  async createCourse(courseData: CreateCourseDto, videoPath: string, createdBy: string) {
-    console.log("Saving Video Path:", videoPath); // ✅ Debugging log
-  
+
+  async createCourse(
+    courseData: CreateCourseDto,
+    videoPath: string,
+    createdBy: string,
+  ) {
+    console.log('Saving Video Path:', videoPath);
+
     const newCourse = this.courseRepository.create({
       ...courseData,
-      videoPath, // ✅ Ensure videoPath is included
-      created_by: { id: createdBy }, // ✅ Pass created_by correctly
+      videoPath,
+      created_by: { id: createdBy },
     });
-  
+
     return this.courseRepository.save(newCourse);
+  }
+
+  async getAllCoursesuploadedByMe(userId: string): Promise<Course[]> {
+    return this.courseRepository.find({
+      where: {
+        created_by: {
+          id: userId,
+        },
+      },
+    });
   }
 }

@@ -6,11 +6,18 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.enableCors({
-    origin: '*', // Allow only frontend
-    credentials: true, // Allow credentials (Authorization, Cookies)
+    origin: (origin, callback) => {
+      if (!origin) {
+        // Allow requests from Postman or server-to-server requests
+        return callback(null, true);
+      }
+      callback(null, true); // Allow all origins dynamically
+    },
+    credentials: true, // ✅ Allow cookies and authentication headers
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    allowedHeaders: 'Content-Type,Authorization',
+    allowedHeaders: ['Content-Type', 'Authorization'],
   });
+  
 
   app.useGlobalPipes(new ValidationPipe());
   
