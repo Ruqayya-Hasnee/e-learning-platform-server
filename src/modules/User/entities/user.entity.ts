@@ -1,4 +1,6 @@
 import { RoleTypeEnum } from 'src/types/common';
+import { EnrollCourse } from '../../course/entities/coursesEnrollment.entity'; // Adjust the path if necessary
+import { OneToMany } from 'typeorm';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -38,4 +40,7 @@ export class User {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @OneToMany(() => EnrollCourse, (enrollment) => enrollment.user)
+  enrollments: EnrollCourse[];
 }

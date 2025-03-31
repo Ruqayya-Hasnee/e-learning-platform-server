@@ -1,23 +1,18 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Post,
-  Req,
-  UploadedFile,
-  UseInterceptors,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, UploadedFile, UseInterceptors, Headers, Req, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
 import { CourseService } from './course.service';
-import { AuthenticatedRequest } from 'src/types/common';
 import { Course } from './entities/course.entity';
 import { CreateCourseDto } from './dto/createCourse.dto';
 import { extname } from 'path';
 import { diskStorage } from 'multer';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { AuthService } from '../Auth/auth.service';
 
 @Controller('courses')
 export class CourseController {
-  constructor(private readonly courseService: CourseService) {}
+  constructor(
+    private readonly courseService: CourseService,
+    private readonly authService: AuthService, 
+  ) {}
 
   @Get()
   async getAllCourses(): Promise<Course[]> {
@@ -30,8 +25,7 @@ export class CourseController {
       storage: diskStorage({
         destination: './uploads/courses',
         filename: (req, file, cb) => {
-          const uniqueSuffix =
-            Date.now() + '-' + Math.round(Math.random() * 1e9);
+          const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
           const ext = extname(file.originalname);
           cb(null, `${uniqueSuffix}${ext}`);
         },
@@ -42,15 +36,18 @@ export class CourseController {
   async createCourse(
     @Body() courseData: CreateCourseDto,
     @UploadedFile() video: Express.Multer.File,
-    @Req() req: AuthenticatedRequest,
+    @Headers('authorization') authHeader: string, // Extract token from headers
   ) {
-    const userId = req.user?.userId;
-    if (!userId) {
-      throw new Error('User not authenticated');
+    if (!authHeader) {
+      throw new UnauthorizedException('Authorization header is missing');
     }
 
+    const token = this.extractToken(authHeader);
+    const decodedToken = this.authService.verifyToken(token);
+    const userId = decodedToken.userId;
+
     if (!video) {
-      throw new Error('No video file uploaded');
+      throw new InternalServerErrorException('No video file uploaded');
     }
 
     const videoPath = `/uploads/courses/${video.filename}`;
@@ -58,19 +55,41 @@ export class CourseController {
   }
 
   @Get('uploadedByMe')
-  async getAllCoursesuploadedByMe(
-    @Req() req: AuthenticatedRequest,
-  ): Promise<Course[]> {
-    const userId = req.user?.userId;
+  async getAllCoursesuploadedByMe(@Headers('authorization') authHeader: string) {
+    if (!authHeader) {
+      throw new UnauthorizedException('Authorization header is missing');
+    }
+
+    const token = this.extractToken(authHeader);
+    const decodedToken = this.authService.verifyToken(token);
+    const userId = decodedToken.userId;
+
     return this.courseService.getAllCoursesuploadedByMe(userId);
   }
 
   // Enroll a user in a course
   @Post('enroll')
   async enrollUser(
-    @Body('userId') userId: string,
     @Body('courseId') courseId: string,
+    @Headers('authorization') authHeader: string,
   ) {
+    if (!authHeader) {
+      throw new UnauthorizedException('Authorization header is missing');
+    }
+
+    const token = this.extractToken(authHeader);
+    const decodedToken = this.authService.verifyToken(token);
+    const userId = decodedToken.userId;
+
     return this.courseService.enrollUser(userId, courseId);
+  }
+
+  // Helper method to extract the token from Authorization header
+  private extractToken(authHeader: string): string {
+    const token = authHeader.split(' ')[1];
+    if (!token) {
+      throw new UnauthorizedException('Token is missing or malformed');
+    }
+    return token;
   }
 }

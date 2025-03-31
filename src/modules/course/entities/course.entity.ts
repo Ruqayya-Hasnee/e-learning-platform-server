@@ -1,4 +1,6 @@
 import { User } from 'src/modules/User/entities/user.entity';
+import { EnrollCourse } from './coursesEnrollment.entity'; 
+import { OneToMany } from 'typeorm';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -35,4 +37,7 @@ export class Course {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @OneToMany(() => EnrollCourse, (enrollment) => enrollment.course)
+  enrollments: EnrollCourse[];
 }
