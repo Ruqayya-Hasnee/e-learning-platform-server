@@ -1,11 +1,11 @@
-import { 
-  Body, 
-  Controller, 
-  Get, 
-  Post, 
-  Req, 
-  UploadedFile, 
-  UseInterceptors 
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Req,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { CourseService } from './course.service';
 import { AuthenticatedRequest } from 'src/types/common';
@@ -19,7 +19,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 export class CourseController {
   constructor(private readonly courseService: CourseService) {}
 
-  @Get() 
+  @Get()
   async getAllCourses(): Promise<Course[]> {
     return this.courseService.getAllCourses();
   }
@@ -30,7 +30,8 @@ export class CourseController {
       storage: diskStorage({
         destination: './uploads/courses',
         filename: (req, file, cb) => {
-          const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+          const uniqueSuffix =
+            Date.now() + '-' + Math.round(Math.random() * 1e9);
           const ext = extname(file.originalname);
           cb(null, `${uniqueSuffix}${ext}`);
         },
@@ -41,7 +42,7 @@ export class CourseController {
   async createCourse(
     @Body() courseData: CreateCourseDto,
     @UploadedFile() video: Express.Multer.File,
-    @Req() req: AuthenticatedRequest
+    @Req() req: AuthenticatedRequest,
   ) {
     const userId = req.user?.userId;
     if (!userId) {
@@ -56,11 +57,20 @@ export class CourseController {
     return this.courseService.createCourse(courseData, videoPath, userId);
   }
 
-  @Get('uploadedByMe') 
-  async getAllCoursesuploadedByMe(@Req() req: AuthenticatedRequest): Promise<Course[]> {
+  @Get('uploadedByMe')
+  async getAllCoursesuploadedByMe(
+    @Req() req: AuthenticatedRequest,
+  ): Promise<Course[]> {
     const userId = req.user?.userId;
     return this.courseService.getAllCoursesuploadedByMe(userId);
   }
 
-
+  // Enroll a user in a course
+  @Post('enroll')
+  async enrollUser(
+    @Body('userId') userId: string,
+    @Body('courseId') courseId: string,
+  ) {
+    return this.courseService.enrollUser(userId, courseId);
+  }
 }
