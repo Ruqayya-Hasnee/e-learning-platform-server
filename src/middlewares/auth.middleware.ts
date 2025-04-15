@@ -11,12 +11,17 @@ export class JwtMiddleware implements NestMiddleware {
   constructor(private readonly authService: AuthService) {}
 
   async use(req: Request, res: Response, next: NextFunction) {
-    console.log(req.originalUrl)
-    if (
-      req.originalUrl.startsWith('/auth/') ||
-      req.originalUrl.startsWith('/uploads/courses')
-    ) {
-      return next(); // Skip authentication for public routes
+    console.log(req.originalUrl);
+
+    const publicPaths = [
+      '/auth/',
+      '/uploads/courses',
+      '/courses',
+    ];
+
+    // Check if request URL starts with any public path
+    if (publicPaths.some(path => req.originalUrl.startsWith(path))) {
+      return next();
     }
 
     const authHeader = req.headers.authorization;
