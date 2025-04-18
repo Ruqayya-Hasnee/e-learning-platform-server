@@ -1,12 +1,12 @@
 import { RoleTypeEnum } from 'src/types/common';
-import { EnrollCourse } from '../../course/entities/coursesEnrollment.entity'; // Adjust the path if necessary
-import { OneToMany } from 'typeorm';
+import { EnrollCourse } from '../../course/entities/coursesEnrollment.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
 
 @Entity('users')

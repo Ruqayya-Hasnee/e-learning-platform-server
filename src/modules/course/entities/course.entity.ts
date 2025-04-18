@@ -1,6 +1,5 @@
 import { User } from 'src/modules/User/entities/user.entity';
-import { EnrollCourse } from './coursesEnrollment.entity'; 
-import { OneToMany } from 'typeorm';
+import { EnrollCourse } from './coursesEnrollment.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -8,6 +7,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
+  OneToMany,
   JoinColumn,
 } from 'typeorm';
 
