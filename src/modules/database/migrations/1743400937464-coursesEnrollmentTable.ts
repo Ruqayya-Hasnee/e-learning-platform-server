@@ -7,7 +7,7 @@ export class CoursesEnrollmentTable1743400937464 implements MigrationInterface {
         await queryRunner.query(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp";`);
 
         await queryRunner.query(`
-            CREATE TABLE user_course_enrollments (
+            CREATE TABLE enroll_course (
                 id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
                 course_id UUID NOT NULL,
                 user_id UUID NOT NULL,
@@ -19,6 +19,6 @@ export class CoursesEnrollmentTable1743400937464 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`DROP TABLE IF EXISTS user_course_enrollments;`);
+        await queryRunner.query(`DROP TABLE IF EXISTS enroll_course;`);
     }
 }
